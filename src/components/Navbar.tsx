@@ -10,12 +10,12 @@ import {
   X,
   Sun,
   Moon,
-  Bell,
   User,
   LogOut,
   LayoutDashboard,
   Shield,
 } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 
 const navLinks = [
   { label: "Equity", path: "/equity" },
@@ -59,9 +59,7 @@ export default function Navbar() {
           </Button>
           {user ? (
             <>
-              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
-                <Bell className="h-4 w-4" />
-              </Button>
+              <NotificationBell />
               {isAdmin && (
                 <Button variant="ghost" size="icon" onClick={() => navigate("/admin/dashboard")}>
                   <Shield className="h-4 w-4" />

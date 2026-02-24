@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, BookOpen, Download, TrendingUp, BarChart3, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import AdminAnnouncementDialog from "@/components/AdminAnnouncementDialog";
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -45,7 +46,10 @@ export default function AdminDashboard() {
             <Shield className="h-6 w-6 text-accent" />
             <h1 className="font-display text-3xl font-bold">Admin Dashboard</h1>
           </div>
-          <p className="text-muted-foreground mb-8">Platform overview and management</p>
+          <div className="flex items-center justify-between mb-8">
+            <p className="text-muted-foreground">Platform overview and management</p>
+            <AdminAnnouncementDialog />
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
