@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Shield } from "lucide-react";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState("srinagariact@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
