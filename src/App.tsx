@@ -11,7 +11,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminLogin from "./pages/AdminLogin";
-import AdminRegister from "./pages/AdminRegister";
+
 import Dashboard from "./pages/Dashboard";
 import Bookmarks from "./pages/Bookmarks";
 import Downloads from "./pages/Downloads";
@@ -62,7 +62,7 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin/register" element={<AdminRegister />} />
+              
 
               {/* User Protected */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />

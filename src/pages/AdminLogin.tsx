@@ -10,22 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { Shield } from "lucide-react";
 
-const ADMIN_SECRET = "SUBHAJIT_GOD";
-
 export default function AdminLogin() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("srinagariact@gmail.com");
   const [password, setPassword] = useState("");
-  const [secretCode, setSecretCode] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (secretCode !== ADMIN_SECRET) {
-      toast({ title: "Invalid secret code", variant: "destructive" });
-      return;
-    }
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
@@ -72,17 +65,11 @@ export default function AdminLogin() {
                   <Label htmlFor="password">Password</Label>
                   <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="secret">Secret Code</Label>
-                  <Input id="secret" type="password" value={secretCode} onChange={(e) => setSecretCode(e.target.value)} required placeholder="Enter admin secret code" />
-                </div>
                 <Button type="submit" className="w-full glow-gold bg-accent text-accent-foreground hover:bg-accent/90" disabled={loading}>
                   <Shield className="mr-2 h-4 w-4" /> {loading ? "Verifying..." : "Admin Sign In"}
                 </Button>
               </form>
               <p className="text-sm text-muted-foreground text-center mt-4">
-                <Link to="/admin/register" className="text-accent hover:underline">Register as Admin</Link>
-                {" · "}
                 <Link to="/login" className="text-primary hover:underline">User Login</Link>
               </p>
             </CardContent>
