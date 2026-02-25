@@ -65,6 +65,9 @@ export default function Navbar() {
                   <Shield className="h-4 w-4" />
                 </Button>
               )}
+              <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard/profile")}>
+                <User className="h-4 w-4" />
+              </Button>
               <Button variant="ghost" size="icon" onClick={() => navigate("/dashboard")}>
                 <LayoutDashboard className="h-4 w-4" />
               </Button>
