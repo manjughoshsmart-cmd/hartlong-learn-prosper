@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
 import Dashboard from "./pages/Dashboard";
+import ProfileSettings from "./pages/ProfileSettings";
 import Bookmarks from "./pages/Bookmarks";
 import Downloads from "./pages/Downloads";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -70,6 +71,7 @@ const App = () => (
 
               {/* User Protected */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+              <Route path="/dashboard/profile" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
               <Route path="/dashboard/bookmarks" element={<ProtectedRoute><Bookmarks /></ProtectedRoute>} />
               <Route path="/dashboard/downloads" element={<ProtectedRoute><Downloads /></ProtectedRoute>} />
 
