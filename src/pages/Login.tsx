@@ -8,11 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { LogIn } from "lucide-react";
+import { LogIn, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -47,13 +48,21 @@ export default function Login() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" />
+                  <div className="relative">
+                    <Input id="password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" />
+                    <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </Button>
+                  </div>
                 </div>
                 <Button type="submit" className="w-full glow-primary" disabled={loading}>
                   <LogIn className="mr-2 h-4 w-4" /> {loading ? "Signing in..." : "Sign In"}
                 </Button>
               </form>
-              <p className="text-sm text-muted-foreground text-center mt-4">
+              <p className="text-sm text-muted-foreground text-center mt-3">
+                <Link to="/forgot-password" className="text-primary hover:underline">Forgot Password?</Link>
+              </p>
+              <p className="text-sm text-muted-foreground text-center mt-2">
                 Don't have an account? <Link to="/register" className="text-primary hover:underline">Register</Link>
               </p>
               <p className="text-sm text-muted-foreground text-center mt-2">
