@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string
+          details: Json | null
+          entity_id: string | null
+          entity_type: string
+          id: string
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+        }
+        Relationships: []
+      }
       bookmarks: {
         Row: {
           created_at: string
@@ -203,48 +233,131 @@ export type Database = {
         }
         Relationships: []
       }
+      resource_versions: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          resource_id: string
+          uploaded_by: string | null
+          version_number: number
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          resource_id: string
+          uploaded_by?: string | null
+          version_number?: number
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          resource_id?: string
+          uploaded_by?: string | null
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_versions_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       resources: {
         Row: {
           category: string
           created_at: string
           created_by: string | null
+          deleted_at: string | null
           description: string | null
+          expires_at: string | null
+          file_name: string | null
+          file_size: number | null
           file_type: string
           file_url: string | null
           id: string
+          is_deleted: boolean
           is_featured: boolean
           is_published: boolean
           thumbnail_url: string | null
           title: string
           updated_at: string
+          visibility: string
         }
         Insert: {
           category: string
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           description?: string | null
+          expires_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
           file_type: string
           file_url?: string | null
           id?: string
+          is_deleted?: boolean
           is_featured?: boolean
           is_published?: boolean
           thumbnail_url?: string | null
           title: string
           updated_at?: string
+          visibility?: string
         }
         Update: {
           category?: string
           created_at?: string
           created_by?: string | null
+          deleted_at?: string | null
           description?: string | null
+          expires_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
           file_type?: string
           file_url?: string | null
           id?: string
+          is_deleted?: boolean
           is_featured?: boolean
           is_published?: boolean
           thumbnail_url?: string | null
           title?: string
           updated_at?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          id: string
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: Json
+        }
+        Insert: {
+          id?: string
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
+        }
+        Update: {
+          id?: string
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: Json
         }
         Relationships: []
       }

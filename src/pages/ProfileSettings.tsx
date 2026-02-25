@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { User, Camera, Save, ArrowLeft } from "lucide-react";
+import { User, Camera, Save, ArrowLeft, Lock, Eye, EyeOff } from "lucide-react";
+import PasswordStrengthIndicator, { validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
 
 export default function ProfileSettings() {
   const { user } = useAuth();
@@ -175,8 +176,96 @@ export default function ProfileSettings() {
               </Button>
             </CardContent>
           </Card>
+
+          {/* Change Password Card */}
+          <ChangePasswordCard />
         </motion.div>
       </div>
     </Layout>
+  );
+}
+
+function ChangePasswordCard() {
+  const { user, signOut } = useAuth();
+  const { toast } = useToast();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [changing, setChanging] = useState(false);
+
+  const handleChange = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast({ title: "All fields required", variant: "destructive" }); return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ title: "Passwords don't match", variant: "destructive" }); return;
+    }
+    if (!validatePasswordStrength(newPassword)) {
+      toast({ title: "Password doesn't meet requirements", variant: "destructive" }); return;
+    }
+
+    setChanging(true);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user?.email || "", password: currentPassword,
+    });
+    if (signInError) {
+      toast({ title: "Current password is incorrect", variant: "destructive" });
+      setChanging(false); return;
+    }
+
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) {
+      toast({ title: "Failed to update", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Password updated! You'll be signed out." });
+      setTimeout(() => signOut(), 2000);
+    }
+    setChanging(false);
+  };
+
+  return (
+    <Card className="glass-card mt-6">
+      <CardHeader>
+        <CardTitle className="font-display text-xl flex items-center gap-2"><Lock className="h-5 w-5" /> Change Password</CardTitle>
+        <CardDescription>You'll be signed out after changing your password</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label>Current Password</Label>
+          <div className="relative">
+            <Input type={showCurrent ? "text" : "password"} value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+            <button type="button" onClick={() => setShowCurrent(!showCurrent)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label>New Password</Label>
+          <div className="relative">
+            <Input type={showNew ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+            <button type="button" onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          {newPassword && <PasswordStrengthIndicator password={newPassword} />}
+        </div>
+        <div className="space-y-2">
+          <Label>Confirm New Password</Label>
+          <div className="relative">
+            <Input type={showConfirm ? "text" : "password"} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+            <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          {confirmPassword && newPassword !== confirmPassword && <p className="text-xs text-destructive">Passwords don't match</p>}
+        </div>
+        <Button onClick={handleChange} disabled={changing} className="w-full">
+          <Lock className="mr-2 h-4 w-4" /> {changing ? "Updating..." : "Change Password"}
+        </Button>
+      </CardContent>
+    </Card>
   );
 }
