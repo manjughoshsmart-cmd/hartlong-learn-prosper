@@ -27,16 +27,22 @@ export default function Login() {
       toast({ title: "Login failed", description: error.message, variant: "destructive" });
       return;
     }
-    // Check if user is admin
+    // Wait for session to be fully established before checking role
+    const userId = data.user.id;
     const { data: roleData } = await supabase
       .from("user_roles")
       .select("role")
-      .eq("user_id", data.user.id)
+      .eq("user_id", userId)
       .eq("role", "admin")
       .maybeSingle();
     setLoading(false);
-    toast({ title: "Welcome back!" });
-    navigate(roleData ? "/admin/dashboard" : "/dashboard");
+    const isAdmin = !!roleData;
+    toast({ title: isAdmin ? "Welcome, Admin!" : "Welcome back!" });
+    if (isAdmin) {
+      navigate("/admin/dashboard", { replace: true });
+    } else {
+      navigate("/dashboard", { replace: true });
+    }
   };
 
   return (
