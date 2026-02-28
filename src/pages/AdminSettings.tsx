@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import Layout from "@/components/Layout";
+import AdminLayout from "@/components/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -128,7 +128,7 @@ export default function AdminSettings() {
   };
 
   return (
-    <Layout>
+    <AdminLayout>
       <div className="container mx-auto px-4 py-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-2 mb-6">
@@ -252,6 +252,6 @@ export default function AdminSettings() {
           </Tabs>
         </motion.div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 }

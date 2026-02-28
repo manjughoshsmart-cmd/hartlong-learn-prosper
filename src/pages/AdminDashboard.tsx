@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import Layout from "@/components/Layout";
+import AdminLayout from "@/components/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, BookOpen, Download, TrendingUp, BarChart3, Shield } from "lucide-react";
@@ -39,7 +39,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <Layout>
+    <AdminLayout>
       <div className="container mx-auto px-4 py-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center gap-2 mb-2">
@@ -85,6 +85,6 @@ export default function AdminDashboard() {
           ))}
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 }
