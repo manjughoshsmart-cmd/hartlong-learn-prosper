@@ -16,6 +16,7 @@ import {
   Shield,
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
+import GlobalSearch from "@/components/GlobalSearch";
 
 const navLinks = [
   { label: "Equity", path: "/equity" },
@@ -54,6 +55,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex items-center gap-2">
+          <GlobalSearch />
           <Button variant="ghost" size="icon" onClick={toggleTheme}>
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>

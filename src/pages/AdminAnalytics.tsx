@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import Layout from "@/components/Layout";
+import AdminLayout from "@/components/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart3, Users, BookOpen, Download, TrendingUp, Eye } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
@@ -59,11 +59,11 @@ export default function AdminAnalytics() {
   ];
 
   if (loading) {
-    return <Layout><div className="min-h-[80vh] flex items-center justify-center"><p className="text-muted-foreground">Loading analytics...</p></div></Layout>;
+    return <AdminLayout><div className="min-h-[80vh] flex items-center justify-center"><p className="text-muted-foreground">Loading analytics...</p></div></AdminLayout>;
   }
 
   return (
-    <Layout>
+    <AdminLayout>
       <div className="container mx-auto px-4 py-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-3xl font-bold mb-2"><span className="text-gradient-primary">Analytics</span></h1>
@@ -124,6 +124,6 @@ export default function AdminAnalytics() {
           </motion.div>
         </div>
       </div>
-    </Layout>
+    </AdminLayout>
   );
 }
