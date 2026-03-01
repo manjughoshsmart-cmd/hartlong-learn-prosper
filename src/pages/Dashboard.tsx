@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Layout from "@/components/Layout";
@@ -16,6 +16,7 @@ import {
   Bell,
   ArrowRight,
   Activity,
+  RefreshCw,
 } from "lucide-react";
 import {
   AreaChart,
@@ -42,8 +43,17 @@ export default function Dashboard() {
   const [downloadCount, setDownloadCount] = useState(0);
   const [notifCount, setNotifCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [activityData, setActivityData] = useState<{ name: string; downloads: number; bookmarks: number }[]>([]);
   const [categoryData, setCategoryData] = useState<{ name: string; value: number }[]>([]);
+
+  // Pull-to-refresh
+  const pullY = useMotionValue(0);
+  const pullOpacity = useTransform(pullY, [0, 60, 100], [0, 0.5, 1]);
+  const pullRotation = useTransform(pullY, [0, 100], [0, 360]);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isPulling, setIsPulling] = useState(false);
+  const startY = useRef(0);
 
   const loadData = useCallback(async () => {
     if (!user) return;
@@ -78,9 +88,7 @@ export default function Dashboard() {
     setLoading(false);
   }, [user]);
 
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  useEffect(() => { loadData(); }, [loadData]);
 
   // Real-time subscriptions
   useEffect(() => {
@@ -93,6 +101,41 @@ export default function Dashboard() {
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [user, loadData]);
+
+  // Pull-to-refresh touch handlers
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handleTouchStart = (e: TouchEvent) => {
+      if (el.scrollTop === 0) {
+        startY.current = e.touches[0].clientY;
+        setIsPulling(true);
+      }
+    };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isPulling) return;
+      const dy = Math.max(0, e.touches[0].clientY - startY.current);
+      pullY.set(Math.min(dy, 120));
+      if (dy > 20) e.preventDefault();
+    };
+    const handleTouchEnd = async () => {
+      if (pullY.get() > 80) {
+        setRefreshing(true);
+        await loadData();
+        setRefreshing(false);
+      }
+      pullY.set(0);
+      setIsPulling(false);
+    };
+    el.addEventListener("touchstart", handleTouchStart, { passive: true });
+    el.addEventListener("touchmove", handleTouchMove, { passive: false });
+    el.addEventListener("touchend", handleTouchEnd);
+    return () => {
+      el.removeEventListener("touchstart", handleTouchStart);
+      el.removeEventListener("touchmove", handleTouchMove);
+      el.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isPulling, loadData, pullY]);
 
   if (loading) {
     return <Layout><SkeletonDashboard /></Layout>;
@@ -107,7 +150,20 @@ export default function Dashboard() {
   return (
     <Layout>
       <PageTransition>
-        <div className="container mx-auto px-4 py-6 sm:py-8">
+        <div ref={containerRef} className="container mx-auto px-4 py-6 sm:py-8 relative">
+          {/* Pull-to-refresh indicator */}
+          <motion.div
+            style={{ opacity: pullOpacity }}
+            className="flex items-center justify-center py-3 lg:hidden"
+          >
+            <motion.div style={{ rotate: pullRotation }}>
+              <RefreshCw className={`h-5 w-5 text-primary ${refreshing ? "animate-spin" : ""}`} />
+            </motion.div>
+            <span className="ml-2 text-xs text-muted-foreground">
+              {refreshing ? "Refreshing..." : "Pull to refresh"}
+            </span>
+          </motion.div>
+
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="font-display text-2xl sm:text-3xl font-bold mb-1">
               Welcome back, <span className="text-gradient-primary">{user?.user_metadata?.display_name || "Trader"}</span>
