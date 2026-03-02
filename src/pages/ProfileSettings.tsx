@@ -10,8 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
-import { User, Camera, Save, ArrowLeft, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Camera, Save, ArrowLeft, Lock, Eye, EyeOff, Trash2 } from "lucide-react";
 import PasswordStrengthIndicator, { validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function ProfileSettings() {
   const { user } = useAuth();
@@ -179,6 +183,9 @@ export default function ProfileSettings() {
 
           {/* Change Password Card */}
           <ChangePasswordCard />
+
+          {/* Delete Account Card */}
+          <DeleteAccountCard />
         </motion.div>
       </div>
     </Layout>
@@ -265,6 +272,70 @@ function ChangePasswordCard() {
         <Button onClick={handleChange} disabled={changing} className="w-full">
           <Lock className="mr-2 h-4 w-4" /> {changing ? "Updating..." : "Change Password"}
         </Button>
+      </CardContent>
+    </Card>
+  );
+}
+
+function DeleteAccountCard() {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [deleting, setDeleting] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    const { data, error } = await supabase.functions.invoke("delete-account");
+    if (error || data?.error) {
+      toast({ title: "Failed to delete account", description: data?.error || error?.message, variant: "destructive" });
+      setDeleting(false);
+      return;
+    }
+    await supabase.auth.signOut();
+    navigate("/login");
+    toast({ title: "Account deleted successfully" });
+  };
+
+  return (
+    <Card className="glass-card mt-6 border-destructive/30">
+      <CardHeader>
+        <CardTitle className="font-display text-xl flex items-center gap-2 text-destructive">
+          <Trash2 className="h-5 w-5" /> Delete Account
+        </CardTitle>
+        <CardDescription>
+          Permanently delete your account and all associated data. This action cannot be undone.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" className="w-full">
+              <Trash2 className="mr-2 h-4 w-4" /> Delete My Account
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete your account, profile, bookmarks, downloads, comments, and all associated data. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="space-y-2 py-2">
+              <Label>Type <span className="font-mono font-bold">DELETE</span> to confirm</Label>
+              <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder="DELETE" />
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setConfirmText("")}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={confirmText !== "DELETE" || deleting}
+                onClick={handleDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {deleting ? "Deleting..." : "Delete Forever"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardContent>
     </Card>
   );
