@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import Layout from "@/components/Layout";
 import PageTransition from "@/components/PageTransition";
 import { SkeletonDashboard } from "@/components/SkeletonCard";
+import OnboardingTour from "@/components/OnboardingTour";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -149,6 +150,7 @@ export default function Dashboard() {
 
   return (
     <Layout>
+      <OnboardingTour />
       <PageTransition>
         <div ref={containerRef} className="container mx-auto px-4 py-6 sm:py-8 relative">
           {/* Pull-to-refresh indicator */}
