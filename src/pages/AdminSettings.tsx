@@ -10,8 +10,12 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import PasswordStrengthIndicator, { validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
-import { Settings, Lock, Palette, Eye, EyeOff, Save, Shield, ScrollText, ArrowLeft } from "lucide-react";
+import { Settings, Lock, Palette, Eye, EyeOff, Save, Shield, ScrollText, ArrowLeft, Trash2, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function AdminSettings() {
   const { user, signOut } = useAuth();
@@ -142,10 +146,11 @@ export default function AdminSettings() {
           </div>
 
           <Tabs defaultValue="security" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="security" className="gap-2"><Lock className="h-4 w-4" /> Security</TabsTrigger>
               <TabsTrigger value="branding" className="gap-2"><Palette className="h-4 w-4" /> Branding</TabsTrigger>
               <TabsTrigger value="audit" className="gap-2"><ScrollText className="h-4 w-4" /> Audit Logs</TabsTrigger>
+              <TabsTrigger value="danger" className="gap-2 text-destructive"><AlertTriangle className="h-4 w-4" /> Danger</TabsTrigger>
             </TabsList>
 
             {/* Security Tab */}
@@ -249,9 +254,76 @@ export default function AdminSettings() {
                 </CardContent>
               </Card>
             </TabsContent>
+            {/* Danger Zone Tab */}
+            <TabsContent value="danger">
+              <DangerZoneCard />
+            </TabsContent>
           </Tabs>
         </motion.div>
       </div>
     </AdminLayout>
+  );
+}
+
+function DangerZoneCard() {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [resetting, setResetting] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+
+  const handleReset = async () => {
+    setResetting(true);
+    const { data, error } = await supabase.functions.invoke("reset-database");
+    if (error || data?.error) {
+      toast({ title: "Reset failed", description: data?.error || error?.message, variant: "destructive" });
+    } else {
+      toast({ title: "Database reset complete", description: `${data.users_deleted} non-admin users removed. All resources, comments, and bookmarks cleared.` });
+    }
+    setResetting(false);
+    setConfirmText("");
+  };
+
+  return (
+    <Card className="glass-card border-destructive/30">
+      <CardHeader>
+        <CardTitle className="font-display flex items-center gap-2 text-destructive">
+          <AlertTriangle className="h-5 w-5" /> Danger Zone
+        </CardTitle>
+        <CardDescription>
+          Reset the entire database. This deletes all resources, comments, bookmarks, downloads, notifications, and non-admin users. Admin accounts and site settings are preserved. <strong>This cannot be undone.</strong>
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" className="w-full">
+              <Trash2 className="mr-2 h-4 w-4" /> Reset Database
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete all resources, comments, bookmarks, downloads, notifications, and non-admin user accounts. Only admin accounts and site settings will be preserved.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="space-y-2 py-2">
+              <Label>Type <span className="font-mono font-bold">RESET</span> to confirm</Label>
+              <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder="RESET" />
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={() => setConfirmText("")}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={confirmText !== "RESET" || resetting}
+                onClick={handleReset}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {resetting ? "Resetting..." : "Reset Everything"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </CardContent>
+    </Card>
   );
 }
