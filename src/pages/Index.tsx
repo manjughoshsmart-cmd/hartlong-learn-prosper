@@ -69,20 +69,26 @@ export default function Index() {
 
   return (
     <Layout>
-      {/* Ticker Tape */}
-      <div className="px-4 pt-4 pb-2">
-        <h2 className="text-lg font-display font-semibold text-foreground mb-2">📈 Live Market</h2>
-      </div>
-      <div className="tradingview-widget-container border-b border-border/40" ref={tickerRef}>
-        <div className="tradingview-widget-container__widget" />
-      </div>
+      <div className="flex flex-col gap-4 p-4 pb-20">
+        {/* Ticker Tape */}
+        <div className="glass-card rounded-xl overflow-hidden">
+          <div className="px-4 pt-3 pb-1">
+            <h2 className="text-base font-display font-semibold text-foreground">📈 Live Market</h2>
+          </div>
+          <div className="tradingview-widget-container" ref={tickerRef}>
+            <div className="tradingview-widget-container__widget" />
+          </div>
+        </div>
 
-      {/* Chart */}
-      <div className="px-4 pt-4 pb-2">
-        <h2 className="text-lg font-display font-semibold text-foreground mb-2">📊 Live BTC Chart</h2>
-      </div>
-      <div className="flex-1 w-full" style={{ height: "calc(100vh - 14rem)" }}>
-        <div id="tradingview-chart" ref={chartRef} className="h-full w-full" />
+        {/* Chart */}
+        <div className="glass-card rounded-xl overflow-hidden flex-1">
+          <div className="px-4 pt-3 pb-1">
+            <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart</h2>
+          </div>
+          <div className="w-full" style={{ height: "calc(100vh - 16rem)" }}>
+            <div id="tradingview-chart" ref={chartRef} className="h-full w-full" />
+          </div>
+        </div>
       </div>
     </Layout>
   );
