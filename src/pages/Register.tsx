@@ -1,4 +1,5 @@
 import { useState } from "react";
+import hartlongLogo from "@/assets/hartlong-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -75,6 +76,9 @@ export default function Register() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
           <Card className="glass-card">
             <CardHeader className="text-center">
+              <div className="mx-auto mb-2">
+                <img src={hartlongLogo} alt="HartLong Logo" className="h-16 w-16 object-contain mx-auto" />
+              </div>
               <CardTitle className="font-display text-2xl">Create Account</CardTitle>
               <CardDescription>Start your trading education journey</CardDescription>
             </CardHeader>
