@@ -37,8 +37,8 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <Link to="/" className="flex items-center gap-1.5 font-display font-bold text-xl">
-          <img src={hartlongLogo} alt="HartLong Logo" className="h-8 w-8 object-contain" />
+        <Link to="/" className="flex items-center gap-2 font-display font-bold text-2xl">
+          <img src={hartlongLogo} alt="HartLong Logo" className="h-10 w-10 object-contain" />
           <span className="text-gradient-primary">HartLong</span>
         </Link>
 
