@@ -1,5 +1,4 @@
 import { useState } from "react";
-import hartlongLogo from "@/assets/hartlong-logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,8 +50,8 @@ export default function AdminLogin() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
           <Card className="glass-card border-accent/30">
             <CardHeader className="text-center">
-              <div className="mx-auto mb-2">
-                <img src={hartlongLogo} alt="HartLong Logo" className="h-16 w-16 object-contain mx-auto" />
+              <div className="mx-auto mb-2 rounded-full bg-accent/10 p-3 w-fit">
+                <Shield className="h-6 w-6 text-accent" />
               </div>
               <CardTitle className="font-display text-2xl">Admin Login</CardTitle>
               <CardDescription>Access the admin control panel</CardDescription>
