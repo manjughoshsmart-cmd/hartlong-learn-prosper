@@ -2,10 +2,12 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, FileText, Video, Image, Bookmark, BookmarkCheck } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { BookOpen, FileText, Video, Image, Bookmark, BookmarkCheck, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+
+import { supabase } from "@/integrations/supabase/client";
 
 interface Resource {
   id: string;
@@ -13,6 +15,8 @@ interface Resource {
   description: string | null;
   category: string;
   file_type: string;
+  file_url?: string | null;
+  file_name?: string | null;
   created_at: string;
 }
 
@@ -39,6 +43,31 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
   const bgOpacity = useTransform(x, [-120, -60, 0], [1, 0.5, 0]);
   const iconScale = useTransform(x, [-120, -60, 0], [1.2, 0.8, 0]);
   const Icon = typeIcons[resource.file_type] || BookOpen;
+
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!resource.file_url) return;
+    try {
+      if (user) {
+        await supabase.from("download_history").insert({ user_id: user.id, resource_id: resource.id });
+      }
+      const response = await fetch(resource.file_url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = resource.file_name || resource.title || "download";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      toast({ title: "Download started!" });
+    } catch {
+      window.open(resource.file_url, "_blank");
+      toast({ title: "Download opened in new tab" });
+    }
+  };
 
   const handleDragEnd = async (_: any, info: PanInfo) => {
     setSwiping(false);
@@ -101,13 +130,23 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
                     {bookmarked && <BookmarkCheck className="h-4 w-4 text-primary shrink-0" />}
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{resource.description}</p>
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex gap-2 mt-2 items-center">
                     <span className="text-[10px] sm:text-xs bg-primary/10 text-primary px-2 py-0.5 rounded capitalize">
                       {resource.category.replace("-", " ")}
                     </span>
                     <span className="text-[10px] sm:text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded capitalize">
                       {resource.file_type}
                     </span>
+                    {resource.file_url && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 ml-auto shrink-0"
+                        onClick={handleDownload}
+                      >
+                        <Download className="h-3.5 w-3.5 text-primary" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
