@@ -61,6 +61,7 @@ const App = () => (
               <Route path="/tools/compound" element={<CompoundCalculator />} />
               <Route path="/tools/profit-loss" element={<ProfitLossCalculator />} />
               <Route path="/tools/brokerage" element={<BrokerageCalculator />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
               {/* Auth */}
               <Route path="/login" element={<Login />} />
