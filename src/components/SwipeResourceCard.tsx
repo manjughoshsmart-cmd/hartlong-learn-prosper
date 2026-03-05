@@ -131,13 +131,23 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
                     {bookmarked && <BookmarkCheck className="h-4 w-4 text-primary shrink-0" />}
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{resource.description}</p>
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex gap-2 mt-2 items-center">
                     <span className="text-[10px] sm:text-xs bg-primary/10 text-primary px-2 py-0.5 rounded capitalize">
                       {resource.category.replace("-", " ")}
                     </span>
                     <span className="text-[10px] sm:text-xs bg-muted text-muted-foreground px-2 py-0.5 rounded capitalize">
                       {resource.file_type}
                     </span>
+                    {resource.file_url && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 ml-auto shrink-0"
+                        onClick={handleDownload}
+                      >
+                        <Download className="h-3.5 w-3.5 text-primary" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
