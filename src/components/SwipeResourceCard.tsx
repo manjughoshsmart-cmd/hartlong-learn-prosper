@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, FileText, Video, Image, Bookmark, BookmarkCheck } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { BookOpen, FileText, Video, Image, Bookmark, BookmarkCheck, Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
