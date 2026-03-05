@@ -44,6 +44,32 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
   const iconScale = useTransform(x, [-120, -60, 0], [1.2, 0.8, 0]);
   const Icon = typeIcons[resource.file_type] || BookOpen;
 
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!resource.file_url) return;
+    try {
+      if (user) {
+        await supabase.from("download_history").insert({ user_id: user.id, resource_id: resource.id });
+      }
+      const response = await fetch(resource.file_url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = resource.file_name || resource.title || "download";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      toast({ title: "Download started!" });
+    } catch {
+      window.open(resource.file_url, "_blank");
+      toast({ title: "Download opened in new tab" });
+    }
+  };
+  const Icon = typeIcons[resource.file_type] || BookOpen;
+
   const handleDragEnd = async (_: any, info: PanInfo) => {
     setSwiping(false);
     if (info.offset.x < -80 && user) {
