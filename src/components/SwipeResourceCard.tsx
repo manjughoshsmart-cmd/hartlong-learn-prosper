@@ -68,7 +68,6 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
       toast({ title: "Download opened in new tab" });
     }
   };
-  const Icon = typeIcons[resource.file_type] || BookOpen;
 
   const handleDragEnd = async (_: any, info: PanInfo) => {
     setSwiping(false);
