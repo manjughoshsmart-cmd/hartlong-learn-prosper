@@ -35,6 +35,7 @@ import CompoundCalculator from "./pages/tools/CompoundCalculator";
 import ProfitLossCalculator from "./pages/tools/ProfitLossCalculator";
 import BrokerageCalculator from "./pages/tools/BrokerageCalculator";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 const queryClient = new QueryClient();
 
