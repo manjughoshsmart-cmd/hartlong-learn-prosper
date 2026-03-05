@@ -16,6 +16,8 @@ interface Resource {
   description: string | null;
   category: string;
   file_type: string;
+  file_url: string | null;
+  file_name: string | null;
   created_at: string;
 }
 
