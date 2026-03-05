@@ -50,10 +50,24 @@ export default function ResourceDetail() {
   };
 
   const trackDownload = async () => {
-    if (!user || !id) return;
-    await supabase.from("download_history").insert({ user_id: user.id, resource_id: id });
-    if (resource?.file_url) window.open(resource.file_url, "_blank");
-    toast({ title: "Download tracked" });
+    if (!user || !id || !resource?.file_url) return;
+    try {
+      await supabase.from("download_history").insert({ user_id: user.id, resource_id: id });
+      const response = await fetch(resource.file_url);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = resource.file_name || resource.title || "download";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      toast({ title: "Download started!" });
+    } catch {
+      window.open(resource.file_url, "_blank");
+      toast({ title: "Download opened in new tab" });
+    }
   };
 
   const addComment = async () => {
