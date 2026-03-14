@@ -36,6 +36,7 @@ import ProfitLossCalculator from "./pages/tools/ProfitLossCalculator";
 import BrokerageCalculator from "./pages/tools/BrokerageCalculator";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Sitemap from "./pages/Sitemap";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => (
               <Route path="/tools/profit-loss" element={<ProfitLossCalculator />} />
               <Route path="/tools/brokerage" element={<BrokerageCalculator />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/sitemap" element={<Sitemap />} />
 
               {/* Auth */}
               <Route path="/login" element={<Login />} />
