@@ -16,6 +16,7 @@ export default function ProfitLossCalculator() {
 
   return (
     <Layout>
+      <SEOHead title="Profit & Loss Calculator" description="Free trading profit and loss calculator. Calculate your stock trading P&L instantly with HartLong." canonical="/tools/profit-loss" />
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-3xl font-bold mb-2"><span className="text-gradient-primary">Profit/Loss Calculator</span></h1>

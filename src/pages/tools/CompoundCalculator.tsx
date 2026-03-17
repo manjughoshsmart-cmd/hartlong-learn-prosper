@@ -17,6 +17,7 @@ export default function CompoundCalculator() {
 
   return (
     <Layout>
+      <SEOHead title="Compound Interest Calculator" description="Free compound interest calculator. See the power of compounding on your investments with HartLong's financial tools." canonical="/tools/compound" />
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-3xl font-bold mb-2"><span className="text-gradient-primary">Compound Interest</span></h1>
