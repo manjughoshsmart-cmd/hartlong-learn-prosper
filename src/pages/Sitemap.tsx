@@ -44,6 +44,7 @@ const sections = [
 const Sitemap = () => {
   return (
     <Layout>
+      <SEOHead title="Sitemap" description="Complete overview of all pages on HartLong Trading platform." canonical="/sitemap" noindex />
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <h1 className="text-3xl font-bold text-foreground mb-2">Sitemap</h1>
         <p className="text-muted-foreground mb-10">
