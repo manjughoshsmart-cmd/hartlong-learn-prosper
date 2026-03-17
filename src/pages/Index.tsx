@@ -1,8 +1,29 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { useTheme } from "@/hooks/useTheme";
 
 export default function Index() {
+  const websiteJsonLd = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "HartLong Trading",
+    url: "https://hartlong.lovable.app",
+    description: "Master stock market trading with HartLong. Free equity, options, mutual fund & ETF courses, trading tools, and expert resources.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://hartlong.lovable.app/resources?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  }), []);
+  const orgJsonLd = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "HartLong Trading",
+    url: "https://hartlong.lovable.app",
+    logo: "https://hartlong.lovable.app/favicon.ico",
+    sameAs: [],
+  }), []);
   const tickerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
@@ -69,6 +90,10 @@ export default function Index() {
 
   return (
     <Layout>
+      <SEOHead
+        canonical="/"
+        jsonLd={websiteJsonLd}
+      />
       <div className="flex flex-col gap-4 p-4 pb-20">
         {/* Ticker Tape */}
         <div className="glass-card rounded-xl overflow-hidden">

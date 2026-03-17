@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -69,6 +70,11 @@ export default function Resources() {
 
   return (
     <Layout>
+      <SEOHead
+        title="Trading Resources – Free PDFs, Videos & Articles"
+        description="Browse free trading resources including PDFs, videos, and articles on equity, options, mutual funds, and ETFs. Learn to trade smarter with HartLong."
+        canonical="/resources"
+      />
       <div className="container mx-auto px-4 py-6 sm:py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6 sm:mb-8">
           <h1 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold mb-1 sm:mb-2">

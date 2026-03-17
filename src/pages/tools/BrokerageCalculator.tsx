@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,7 @@ export default function BrokerageCalculator() {
 
   return (
     <Layout>
+      <SEOHead title="Brokerage Calculator – Estimate Trading Fees" description="Free brokerage calculator to estimate trading fees, STT, GST, and net profit/loss. Calculate your true trading costs with HartLong." canonical="/tools/brokerage" />
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-3xl font-bold mb-2"><span className="text-gradient-primary">Brokerage Calculator</span></h1>

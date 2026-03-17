@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +21,7 @@ export default function SIPCalculator() {
 
   return (
     <Layout>
+      <SEOHead title="SIP Calculator – Calculate SIP Returns" description="Free SIP calculator to estimate returns on your Systematic Investment Plans. Plan your mutual fund SIP investments with HartLong." canonical="/tools/sip" />
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-3xl font-bold mb-2"><span className="text-gradient-primary">SIP Calculator</span></h1>
