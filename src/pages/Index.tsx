@@ -90,6 +90,10 @@ export default function Index() {
 
   return (
     <Layout>
+      <SEOHead
+        canonical="/"
+        jsonLd={websiteJsonLd}
+      />
       <div className="flex flex-col gap-4 p-4 pb-20">
         {/* Ticker Tape */}
         <div className="glass-card rounded-xl overflow-hidden">
