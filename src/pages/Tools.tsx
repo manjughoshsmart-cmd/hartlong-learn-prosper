@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calculator, TrendingUp, Percent, DollarSign, BarChart3 } from "lucide-react";
 
@@ -15,6 +16,11 @@ const tools = [
 export default function Tools() {
   return (
     <Layout>
+      <SEOHead
+        title="Trading Calculators – SIP, Compound Interest & More"
+        description="Free trading calculators: SIP calculator, compound interest, profit/loss, and brokerage fee estimator. Make smarter investment decisions with HartLong tools."
+        canonical="/tools"
+      />
       <div className="container mx-auto px-4 py-12">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
