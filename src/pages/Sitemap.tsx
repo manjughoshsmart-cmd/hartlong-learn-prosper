@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import SEOHead from "@/components/SEOHead";
 import { Link } from "react-router-dom";
 import { Home, TrendingUp, BarChart3, PieChart, Layers, BookOpen, Wrench, Calculator, Shield, LogIn, UserPlus } from "lucide-react";
 
