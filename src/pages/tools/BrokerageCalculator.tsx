@@ -25,6 +25,7 @@ export default function BrokerageCalculator() {
 
   return (
     <Layout>
+      <SEOHead title="Brokerage Calculator – Estimate Trading Fees" description="Free brokerage calculator to estimate trading fees, STT, GST, and net profit/loss. Calculate your true trading costs with HartLong." canonical="/tools/brokerage" />
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-display text-3xl font-bold mb-2"><span className="text-gradient-primary">Brokerage Calculator</span></h1>
