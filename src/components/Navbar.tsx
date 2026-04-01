@@ -15,6 +15,7 @@ import {
   LogOut,
   LayoutDashboard,
   Shield,
+  Youtube,
 } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
 import GlobalSearch from "@/components/GlobalSearch";
