@@ -26,6 +26,7 @@ const navLinks = [
   { label: "ETFs", path: "/etf" },
   { label: "Resources", path: "/resources" },
   { label: "Tools", path: "/tools" },
+  { label: "YouTube Channel", path: "https://youtube.com/@hartlong_trading?si=_VAhXRYTw7JX_Tya", external: true },
 ];
 
 export default function Navbar() {
