@@ -34,6 +34,8 @@ import SIPCalculator from "./pages/tools/SIPCalculator";
 import CompoundCalculator from "./pages/tools/CompoundCalculator";
 import ProfitLossCalculator from "./pages/tools/ProfitLossCalculator";
 import BrokerageCalculator from "./pages/tools/BrokerageCalculator";
+import PositionSizeCalculator from "./pages/tools/PositionSizeCalculator";
+import RiskRewardCalculator from "./pages/tools/RiskRewardCalculator";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Sitemap from "./pages/Sitemap";
