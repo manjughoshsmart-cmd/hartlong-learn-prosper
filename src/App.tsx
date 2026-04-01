@@ -64,6 +64,8 @@ const App = () => (
               <Route path="/tools/compound" element={<CompoundCalculator />} />
               <Route path="/tools/profit-loss" element={<ProfitLossCalculator />} />
               <Route path="/tools/brokerage" element={<BrokerageCalculator />} />
+              <Route path="/tools/position-size" element={<PositionSizeCalculator />} />
+              <Route path="/tools/risk-reward" element={<RiskRewardCalculator />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/sitemap" element={<Sitemap />} />
 
