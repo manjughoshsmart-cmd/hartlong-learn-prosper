@@ -2,67 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://hartlong.lovable.app/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/equity/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/equity/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/option/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/option/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/mutual-fund/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/mutual-fund/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/etf/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/etf/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/resources/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/resources/</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/tools/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/tools/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/tools/sip/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/tools/sip/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/tools/compound/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/tools/compound/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/tools/profit-loss/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/tools/profit-loss/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://hartlong.lovable.app/tools/brokerage/</loc>
+    <loc>https://hartlong-learn-prosper.onrender.com/tools/brokerage/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
