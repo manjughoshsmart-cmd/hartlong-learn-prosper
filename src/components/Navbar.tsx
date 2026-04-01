@@ -45,15 +45,27 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <div className="hidden lg:flex items-center gap-1">
-          {navLinks.map((l) => (
-            <Link
-              key={l.path}
-              to={l.path}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
-            >
-              {l.label}
-            </Link>
-          ))}
+          {navLinks.map((l) =>
+            l.external ? (
+              <a
+                key={l.path}
+                href={l.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
+              >
+                {l.label}
+              </a>
+            ) : (
+              <Link
+                key={l.path}
+                to={l.path}
+                className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
+              >
+                {l.label}
+              </Link>
+            )
+          )}
         </div>
 
         <div className="hidden lg:flex items-center gap-2">
