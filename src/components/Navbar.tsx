@@ -19,7 +19,7 @@ import {
 import NotificationBell from "@/components/NotificationBell";
 import GlobalSearch from "@/components/GlobalSearch";
 
-const navLinks = [
+const navLinks: { label: string; path: string; external?: boolean }[] = [
   { label: "Equity", path: "/equity" },
   { label: "Options", path: "/option" },
   { label: "Mutual Funds", path: "/mutual-fund" },
