@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, TrendingUp, Percent, DollarSign, BarChart3 } from "lucide-react";
-
 import { Calculator, TrendingUp, Percent, DollarSign, BarChart3, Shield, Target } from "lucide-react";
 
 const tools = [
