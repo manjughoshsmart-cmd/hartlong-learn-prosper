@@ -34,6 +34,8 @@ import SIPCalculator from "./pages/tools/SIPCalculator";
 import CompoundCalculator from "./pages/tools/CompoundCalculator";
 import ProfitLossCalculator from "./pages/tools/ProfitLossCalculator";
 import BrokerageCalculator from "./pages/tools/BrokerageCalculator";
+import PositionSizeCalculator from "./pages/tools/PositionSizeCalculator";
+import RiskRewardCalculator from "./pages/tools/RiskRewardCalculator";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Sitemap from "./pages/Sitemap";
@@ -62,6 +64,8 @@ const App = () => (
               <Route path="/tools/compound" element={<CompoundCalculator />} />
               <Route path="/tools/profit-loss" element={<ProfitLossCalculator />} />
               <Route path="/tools/brokerage" element={<BrokerageCalculator />} />
+              <Route path="/tools/position-size" element={<PositionSizeCalculator />} />
+              <Route path="/tools/risk-reward" element={<RiskRewardCalculator />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/sitemap" element={<Sitemap />} />
 

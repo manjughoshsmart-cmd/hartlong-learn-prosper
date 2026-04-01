@@ -4,13 +4,15 @@ import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import SEOHead from "@/components/SEOHead";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calculator, TrendingUp, Percent, DollarSign, BarChart3 } from "lucide-react";
+import { Calculator, TrendingUp, Percent, DollarSign, BarChart3, Shield, Target } from "lucide-react";
 
 const tools = [
   { title: "SIP Calculator", desc: "Calculate returns on Systematic Investment Plans", path: "/tools/sip", icon: TrendingUp },
   { title: "Compound Interest", desc: "See the power of compounding on your investments", path: "/tools/compound", icon: Percent },
   { title: "Profit/Loss", desc: "Calculate your trading profit or loss instantly", path: "/tools/profit-loss", icon: DollarSign },
   { title: "Brokerage Calculator", desc: "Estimate brokerage fees for your trades", path: "/tools/brokerage", icon: BarChart3 },
+  { title: "Position Size", desc: "Calculate ideal position size based on your risk", path: "/tools/position-size", icon: Shield },
+  { title: "Risk-Reward", desc: "Evaluate if a trade is worth taking", path: "/tools/risk-reward", icon: Target },
 ];
 
 export default function Tools() {
