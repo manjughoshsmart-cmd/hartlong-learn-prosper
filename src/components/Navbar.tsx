@@ -119,16 +119,29 @@ export default function Navbar() {
             className="lg:hidden border-t bg-background/95 backdrop-blur-xl overflow-hidden"
           >
             <div className="container mx-auto px-4 py-4 flex flex-col gap-2">
-              {navLinks.map((l) => (
-                <Link
-                  key={l.path}
-                  to={l.path}
-                  onClick={() => setOpen(false)}
-                  className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              {navLinks.map((l) =>
+                l.external ? (
+                  <a
+                    key={l.path}
+                    href={l.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setOpen(false)}
+                    className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
+                  >
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={l.path}
+                    to={l.path}
+                    onClick={() => setOpen(false)}
+                    className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
+                  >
+                    {l.label}
+                  </Link>
+                )
+              )}
               <div className="flex items-center gap-2 pt-2 border-t mt-2">
                 <Button variant="ghost" size="icon" onClick={toggleTheme}>
                   {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
