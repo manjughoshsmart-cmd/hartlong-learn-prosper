@@ -41,7 +41,7 @@ export default function AdminLogin() {
       return;
     }
     toast({ title: "Welcome, Admin!" });
-    navigate("/admin/dashboard");
+    navigate("/admin/dashboard", { replace: true });
   };
 
   return (
