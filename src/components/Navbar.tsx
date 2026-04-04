@@ -39,11 +39,9 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <Link to="/" className="flex items-center gap-1.5">
+        <Link to="/" className="flex items-center gap-1.5 font-display font-bold text-xl">
           <img src={hartlongLogo} alt="HartLong Logo" className="h-10 w-auto object-contain" style={{ maxWidth: '250px' }} />
-        </Link>
-        <Link to="/" className="absolute left-1/2 -translate-x-1/2">
-          <h1 className="font-display font-bold text-xl text-gradient-primary">HartLong</h1>
+          <span className="text-gradient-primary">HartLong</span>
         </Link>
 
         {/* Desktop nav */}
