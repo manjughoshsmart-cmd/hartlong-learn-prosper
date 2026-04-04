@@ -41,7 +41,7 @@ export default function Navbar() {
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <Link to="/" className="flex items-center gap-1.5 font-display font-bold text-xl">
           <img src={hartlongLogo} alt="HartLong Logo" className="h-10 w-auto object-contain" style={{ maxWidth: '250px' }} />
-          <span className="text-gradient-primary">HartLong</span>
+          
         </Link>
 
         {/* Desktop nav */}
