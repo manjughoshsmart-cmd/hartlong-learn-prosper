@@ -168,7 +168,7 @@ export default function Dashboard() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="font-display text-2xl sm:text-3xl font-bold mb-1">
-              Welcome back, <span className="text-gradient-primary">{user?.user_metadata?.display_name || "Trader"}</span>
+              Welcome back, <span className="text-gradient-primary">Admin</span>
             </h1>
             <p className="text-sm text-muted-foreground mb-6 sm:mb-8">Your learning dashboard</p>
           </motion.div>
