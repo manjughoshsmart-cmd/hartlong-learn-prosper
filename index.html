@@ -27,10 +27,17 @@
   <!-- BreachMe Verification -->
   <meta name="breachme-verify" content="breachme-verify=ec2752ef252a0b6fdd8030aa29d4e818" />
 
-  <!-- AdSense -->
+  <!-- AdSense (deferred to avoid blocking LCP) -->
   <meta name="google-adsense-account" content="ca-pub-8569273771190692" />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8569273771190692"
+  <script async defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8569273771190692"
     crossorigin="anonymous"></script>
+
+  <!-- Font preconnect for faster text rendering -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- TradingView preconnect (used on homepage) -->
+  <link rel="preconnect" href="https://s3.tradingview.com" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="HartLong Trading | Official Website" />
