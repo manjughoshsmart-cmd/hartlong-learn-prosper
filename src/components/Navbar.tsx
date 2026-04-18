@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import hartlongLogo from "@/assets/hartlong-logo.png";
+import hartlongLogo from "@/assets/hartlong-logo.png?w=96&format=webp";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
