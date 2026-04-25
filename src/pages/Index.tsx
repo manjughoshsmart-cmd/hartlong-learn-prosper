@@ -132,31 +132,11 @@ export default function Index() {
         {/* Chart */}
         <div className="glass-card rounded-xl overflow-hidden flex-1">
           <div className="px-4 pt-3 pb-1">
-            <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart & Global Indices</h2>
+            <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart</h2>
           </div>
-          <div className="flex flex-col lg:flex-row gap-3 p-2 items-start">
+          <div className="flex justify-start p-2">
             <div style={{ width: "500px", height: "500px", maxWidth: "100%" }}>
               <div id="tradingview-chart" ref={chartRef} className="h-full w-full" />
-            </div>
-            <div className="w-full lg:w-auto" style={{ maxWidth: "100%" }}>
-              <iframe
-                src="https://ssltsw.investing.com?lang=1&forex=1,2,3,5,7,9,10&commodities=8830,8836,8831,8849,8833,8862,8832&indices=175,166,172,27,179,170,174&stocks=345,346,347,348,349,350,352&tabs=1,2,3,4"
-                width="317"
-                height="467"
-                title="Major Global Indices"
-                className="max-w-full border-0"
-              />
-              <div className="font-sans text-[11px] text-muted-foreground" style={{ direction: "ltr" }}>
-                Technical Summary Widget Powered by{" "}
-                <a
-                  href="https://www.investing.com/"
-                  rel="nofollow noopener noreferrer"
-                  target="_blank"
-                  className="font-bold text-primary underline"
-                >
-                  Investing.com
-                </a>
-              </div>
             </div>
           </div>
         </div>
