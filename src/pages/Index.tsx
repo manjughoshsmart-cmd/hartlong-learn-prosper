@@ -26,6 +26,7 @@ export default function Index() {
   }), []);
   const tickerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
+  const heatmapRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const colorTheme = theme === "dark" ? "dark" : "light";
 
@@ -88,6 +89,43 @@ export default function Index() {
     container.appendChild(script);
   }, [colorTheme]);
 
+  // World Indices Heatmap - recreate on theme change
+  useEffect(() => {
+    const container = heatmapRef.current;
+    if (!container) return;
+    container.innerHTML = '<div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>';
+    const script = document.createElement("script");
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js";
+    script.async = true;
+    script.type = "text/javascript";
+    script.innerHTML = JSON.stringify({
+      width: "100%",
+      height: "100%",
+      symbolsGroups: [
+        {
+          name: "Major Indices",
+          originalName: "Indices",
+          symbols: [
+            { name: "FOREXCOM:SPXUSD", displayName: "S&P 500" },
+            { name: "FOREXCOM:NSXUSD", displayName: "Nasdaq 100" },
+            { name: "FOREXCOM:DJI", displayName: "Dow 30" },
+            { name: "INDEX:NKY", displayName: "Nikkei 225" },
+            { name: "INDEX:DEU40", displayName: "DAX Index" },
+            { name: "FOREXCOM:UKXGBP", displayName: "FTSE 100" },
+            { name: "NSE:NIFTY", displayName: "Nifty 50" },
+            { name: "BSE:SENSEX", displayName: "Sensex" },
+            { name: "HSI:HSI", displayName: "Hang Seng" },
+          ],
+        },
+      ],
+      showSymbolLogo: true,
+      isTransparent: true,
+      colorTheme,
+      locale: "en",
+    });
+    container.appendChild(script);
+  }, [colorTheme]);
+
   return (
     <Layout>
       <SEOHead
@@ -132,11 +170,16 @@ export default function Index() {
         {/* Chart */}
         <div className="glass-card rounded-xl overflow-hidden flex-1">
           <div className="px-4 pt-3 pb-1">
-            <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart</h2>
+            <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart & 🌍 World Indices</h2>
           </div>
-          <div className="flex justify-start p-2">
+          <div className="flex flex-col lg:flex-row gap-3 p-2">
             <div style={{ width: "500px", height: "500px", maxWidth: "100%" }}>
               <div id="tradingview-chart" ref={chartRef} className="h-full w-full" />
+            </div>
+            <div className="flex-1 min-w-0" style={{ height: "500px", minHeight: "500px" }}>
+              <div className="tradingview-widget-container h-full w-full" ref={heatmapRef}>
+                <div className="tradingview-widget-container__widget" style={{ height: "100%", width: "100%" }} />
+              </div>
             </div>
           </div>
         </div>
