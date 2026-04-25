@@ -95,11 +95,6 @@ export default function Index() {
         jsonLd={websiteJsonLd}
       />
       <div className="flex flex-col gap-4 p-4 pb-20">
-        {/* Hero H1 for SEO */}
-        <h1 className="text-4xl md:text-5xl font-display font-bold text-center text-gradient-primary py-4">
-          HartLong Trading
-        </h1>
-
         {/* Ticker Tape */}
         <div className="glass-card rounded-xl overflow-hidden">
           <div className="px-4 pt-3 pb-1">
