@@ -26,6 +26,7 @@ export default function Index() {
   }), []);
   const tickerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
+  const heatmapRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const colorTheme = theme === "dark" ? "dark" : "light";
 
@@ -88,6 +89,32 @@ export default function Index() {
     container.appendChild(script);
   }, [colorTheme]);
 
+  // Heat Map - recreate on theme change
+  useEffect(() => {
+    const container = heatmapRef.current;
+    if (!container) return;
+    container.innerHTML = '<div class="tradingview-widget-container__widget"></div>';
+    const script = document.createElement("script");
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js";
+    script.async = true;
+    script.type = "text/javascript";
+    script.innerHTML = JSON.stringify({
+      dataSource: "SPX500",
+      blockSize: "market_cap_basic",
+      blockColor: "change",
+      grouping: "sector",
+      locale: "en",
+      colorTheme,
+      hasTopBar: true,
+      isDataSetEnabled: true,
+      isZoomEnabled: true,
+      hasSymbolTooltip: true,
+      width: "100%",
+      height: "500",
+    });
+    container.appendChild(script);
+  }, [colorTheme]);
+
   return (
     <Layout>
       <SEOHead
@@ -134,9 +161,17 @@ export default function Index() {
           <div className="px-4 pt-3 pb-1">
             <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart</h2>
           </div>
-          <div className="flex justify-start p-2">
-            <div style={{ width: "500px", height: "500px", maxWidth: "100%" }}>
+          <div className="flex flex-col lg:flex-row gap-4 p-2">
+            <div style={{ width: "500px", height: "500px", maxWidth: "100%" }} className="flex-shrink-0">
               <div id="tradingview-chart" ref={chartRef} className="h-full w-full" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="px-2 pb-2">
+                <h3 className="text-sm font-display font-semibold text-foreground">🔥 Market Heat Map</h3>
+              </div>
+              <div className="tradingview-widget-container h-[500px]" ref={heatmapRef}>
+                <div className="tradingview-widget-container__widget" />
+              </div>
             </div>
           </div>
         </div>
