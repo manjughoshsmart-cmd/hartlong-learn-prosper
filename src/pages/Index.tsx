@@ -134,7 +134,7 @@ export default function Index() {
           <div className="px-4 pt-3 pb-1">
             <h2 className="text-base font-display font-semibold text-foreground">📊 Live BTC Chart</h2>
           </div>
-          <div className="w-full" style={{ height: "240px" }}>
+          <div className="w-full" style={{ height: "calc(100vh - 16rem)" }}>
             <div id="tradingview-chart" ref={chartRef} className="h-full w-full" />
           </div>
         </div>
