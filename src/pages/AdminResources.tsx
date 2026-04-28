@@ -33,11 +33,10 @@ import {
 } from "@/components/ui/alert-dialog";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-const ALLOWED_TYPES = [
-  "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  "image/png", "image/jpeg", "image/gif", "image/webp", "video/mp4", "video/webm",
+const ALLOWED_EXTENSIONS = [
+  "pdf", "doc", "docx", "ppt", "pptx", "xls", "xlsx",
+  "png", "jpg", "jpeg", "gif", "webp", "heic", "heif",
+  "mp4", "webm", "mov", "m4v", "3gp", "avi", "mkv",
 ];
 
 interface ResourceForm {
@@ -82,20 +81,25 @@ export default function AdminResources() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      toast({ title: "Unsupported file type", description: "Allowed: PDF, DOCX, PPT, XLSX, images, videos", variant: "destructive" });
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (!ALLOWED_EXTENSIONS.includes(ext)) {
+      toast({ title: "Unsupported file type", description: `.${ext || "?"} not allowed. Use PDF, DOCX, PPT, XLSX, images or videos.`, variant: "destructive" });
       return;
     }
     if (file.size > MAX_FILE_SIZE) {
-      toast({ title: "File too large", description: "Maximum 50MB allowed", variant: "destructive" });
+      toast({ title: "File too large", description: `${(file.size / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`, variant: "destructive" });
       return;
     }
 
     setUploading(true);
-    const ext = file.name.split(".").pop();
     const filePath = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const contentType = file.type || `application/octet-stream`;
 
-    const { error } = await supabase.storage.from("resources").upload(filePath, file);
+    const { error } = await supabase.storage.from("resources").upload(filePath, file, {
+      contentType,
+      cacheControl: "3600",
+      upsert: false,
+    });
     if (error) {
       toast({ title: "Upload failed", description: error.message, variant: "destructive" });
       setUploading(false);
@@ -103,15 +107,16 @@ export default function AdminResources() {
     }
 
     const { data: urlData } = supabase.storage.from("resources").getPublicUrl(filePath);
-    setForm((f) => ({ ...f, file_url: urlData.publicUrl }));
 
-    // Auto-detect file type
-    if (file.type.startsWith("image/")) setForm((f) => ({ ...f, file_type: "image" }));
-    else if (file.type.startsWith("video/")) setForm((f) => ({ ...f, file_type: "video" }));
-    else setForm((f) => ({ ...f, file_type: "pdf" }));
+    // Auto-detect resource type from extension (more reliable than mime on mobile)
+    const imageExts = ["png", "jpg", "jpeg", "gif", "webp", "heic", "heif"];
+    const videoExts = ["mp4", "webm", "mov", "m4v", "3gp", "avi", "mkv"];
+    const detectedType = imageExts.includes(ext) ? "image" : videoExts.includes(ext) ? "video" : "pdf";
+
+    setForm((f) => ({ ...f, file_url: urlData.publicUrl, file_type: detectedType }));
 
     setUploading(false);
-    toast({ title: "File uploaded!" });
+    toast({ title: "File uploaded!", description: "Now fill the title and tap Create Resource." });
   };
 
   const handleSave = async () => {
