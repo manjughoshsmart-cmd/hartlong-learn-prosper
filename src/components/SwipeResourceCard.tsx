@@ -17,6 +17,7 @@ interface Resource {
   file_type: string;
   file_url?: string | null;
   file_name?: string | null;
+  thumbnail_url?: string | null;
   created_at: string;
 }
 
@@ -43,6 +44,10 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
   const bgOpacity = useTransform(x, [-120, -60, 0], [1, 0.5, 0]);
   const iconScale = useTransform(x, [-120, -60, 0], [1.2, 0.8, 0]);
   const Icon = typeIcons[resource.file_type] || BookOpen;
+
+  const thumbSrc =
+    resource.thumbnail_url ||
+    (resource.file_type === "image" ? resource.file_url : null);
 
   const handleDownload = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -117,17 +122,46 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
       >
         <Link to={`/resources/${resource.id}`} onClick={(e) => swiping && e.preventDefault()}>
           <Card className="glass-card hover:glow-primary transition-all cursor-pointer h-full group">
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-start gap-3">
-                <div className="rounded-lg bg-primary/10 p-2 shrink-0">
-                  <Icon className="h-5 w-5 text-primary" />
+            <CardContent className="p-0 overflow-hidden">
+              {/* Thumbnail */}
+              <div className="relative w-full aspect-video bg-gradient-to-br from-primary/10 to-muted/40 overflow-hidden">
+                {thumbSrc ? (
+                  <img
+                    src={thumbSrc}
+                    alt={resource.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : resource.file_type === "video" && resource.file_url ? (
+                  <video
+                    src={resource.file_url}
+                    preload="metadata"
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <Icon className="h-10 w-10 text-primary/60" />
+                  </div>
+                )}
+                <div className="absolute top-2 left-2 rounded-md bg-background/80 backdrop-blur p-1.5">
+                  <Icon className="h-4 w-4 text-primary" />
                 </div>
+                {bookmarked && (
+                  <div className="absolute top-2 right-2 rounded-md bg-background/80 backdrop-blur p-1.5">
+                    <BookmarkCheck className="h-4 w-4 text-primary" />
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 sm:p-5">
+              <div className="flex items-start gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="font-display font-semibold text-sm sm:text-base mb-1 truncate group-hover:text-primary transition-colors flex-1">
                       {resource.title}
                     </h3>
-                    {bookmarked && <BookmarkCheck className="h-4 w-4 text-primary shrink-0" />}
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{resource.description}</p>
                   <div className="flex gap-2 mt-2 items-center">
@@ -149,6 +183,7 @@ export default function SwipeResourceCard({ resource, index, isBookmarked = fals
                     )}
                   </div>
                 </div>
+              </div>
               </div>
             </CardContent>
           </Card>
