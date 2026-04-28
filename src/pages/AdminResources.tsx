@@ -38,6 +38,47 @@ const ALLOWED_EXTENSIONS = [
   "png", "jpg", "jpeg", "gif", "webp", "heic", "heif",
   "mp4", "webm", "mov", "m4v", "3gp", "avi", "mkv",
 ];
+const ACCEPTED_UPLOAD_TYPES = "image/*,video/*,application/pdf,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.webp,.heic,.heif,.mp4,.webm,.mov,.m4v,.3gp,.avi,.mkv";
+const EXTENSION_BY_MIME: Record<string, string> = {
+  "application/pdf": "pdf",
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+  "application/vnd.ms-powerpoint": "ppt",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+  "application/vnd.ms-excel": "xls",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "image/gif": "gif",
+  "image/webp": "webp",
+  "image/heic": "heic",
+  "image/heif": "heif",
+  "video/mp4": "mp4",
+  "video/webm": "webm",
+  "video/quicktime": "mov",
+  "video/x-m4v": "m4v",
+  "video/3gpp": "3gp",
+  "video/x-msvideo": "avi",
+  "video/x-matroska": "mkv",
+};
+const CONTENT_TYPE_BY_EXT: Record<string, string> = Object.fromEntries(Object.entries(EXTENSION_BY_MIME).map(([type, ext]) => [ext, type]));
+const imageExts = ["png", "jpg", "jpeg", "gif", "webp", "heic", "heif"];
+const videoExts = ["mp4", "webm", "mov", "m4v", "3gp", "avi", "mkv"];
+
+const getMobileSafeFileInfo = (file: File) => {
+  const rawName = file.name || "upload";
+  const nameExt = rawName.includes(".") ? rawName.split(".").pop()?.toLowerCase() || "" : "";
+  const mimeExt = EXTENSION_BY_MIME[file.type] || (file.type.startsWith("image/") ? "jpg" : file.type.startsWith("video/") ? "mp4" : "");
+  const ext = ALLOWED_EXTENSIONS.includes(nameExt) ? nameExt : mimeExt;
+  const cleanBaseName = rawName
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const title = cleanBaseName && !["upload", "image", "video", "blob"].includes(cleanBaseName.toLowerCase()) ? cleanBaseName : "Uploaded resource";
+  const detectedType = imageExts.includes(ext) ? "image" : videoExts.includes(ext) ? "video" : "pdf";
+  return { ext, title, detectedType, contentType: file.type || CONTENT_TYPE_BY_EXT[ext] || "application/octet-stream" };
+};
 
 interface ResourceForm {
   title: string; description: string; category: string; file_type: string;
@@ -90,46 +131,40 @@ export default function AdminResources() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    const { ext, title, detectedType, contentType } = getMobileSafeFileInfo(file);
     if (!ALLOWED_EXTENSIONS.includes(ext)) {
-      toast({ title: "Unsupported file type", description: `.${ext || "?"} not allowed. Use PDF, DOCX, PPT, XLSX, images or videos.`, variant: "destructive" });
+      toast({ title: "Unsupported file type", description: "Use PDF, DOCX, PPT, XLSX, images or videos.", variant: "destructive" });
+      e.target.value = "";
       return;
     }
     if (file.size > MAX_FILE_SIZE) {
       toast({ title: "File too large", description: `${(file.size / 1024 / 1024).toFixed(1)}MB exceeds 50MB limit`, variant: "destructive" });
+      e.target.value = "";
       return;
     }
 
     setUploading(true);
     const filePath = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const contentType = file.type || `application/octet-stream`;
-
     const { error } = await supabase.storage.from("resources").upload(filePath, file, {
       contentType,
       cacheControl: "3600",
       upsert: false,
     });
     if (error) {
-      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+      toast({ title: "Upload failed", description: error.message || "Please check your connection and try again.", variant: "destructive" });
       setUploading(false);
+      e.target.value = "";
       return;
     }
 
     const { data: urlData } = supabase.storage.from("resources").getPublicUrl(filePath);
-
-    // Auto-detect resource type from extension (more reliable than mime on mobile)
-    const imageExts = ["png", "jpg", "jpeg", "gif", "webp", "heic", "heif"];
-    const videoExts = ["mp4", "webm", "mov", "m4v", "3gp", "avi", "mkv"];
-    const detectedType = imageExts.includes(ext) ? "image" : videoExts.includes(ext) ? "video" : "pdf";
-
-    const baseName = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
 
     setForm((f) => {
       const next = {
         ...f,
         file_url: urlData.publicUrl,
         file_type: detectedType,
-        title: f.title.trim() || baseName,
+        title: f.title.trim() || title,
       };
       if (autoCreate && !editId) {
         // Fire auto-save with the freshly computed form
@@ -139,6 +174,7 @@ export default function AdminResources() {
     });
 
     setUploading(false);
+    e.target.value = "";
     if (!autoCreate || editId) {
       toast({ title: "File uploaded!", description: "Tap Create Resource to save, or enable Auto-create." });
     }
