@@ -209,7 +209,7 @@ export default function AdminResources() {
             <DialogTrigger asChild>
               <Button className="glow-primary"><Plus className="mr-2 h-4 w-4" /> Add Resource</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw]">
               <DialogHeader>
                 <DialogTitle className="font-display">{editId ? "Edit" : "Create"} Resource</DialogTitle>
                 <DialogDescription>Fill in the resource details below</DialogDescription>
@@ -258,12 +258,22 @@ export default function AdminResources() {
                 <div className="space-y-2">
                   <Label>Upload File</Label>
                   <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
-                    <input type="file" id="resource-file" className="hidden" onChange={handleFileUpload} accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.webp,.mp4,.webm" />
+                    <input type="file" id="resource-file" className="hidden" onChange={handleFileUpload} accept="image/*,video/*,application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" />
                     <label htmlFor="resource-file" className="cursor-pointer flex flex-col items-center gap-2">
                       <Upload className="h-8 w-8 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">{uploading ? "Uploading..." : "Click to upload (max 50MB)"}</span>
+                      <span className="text-sm text-muted-foreground">{uploading ? "Uploading..." : "Tap to choose file (max 50MB)"}</span>
                       <span className="text-xs text-muted-foreground">PDF, DOCX, PPT, XLSX, Images, Videos</span>
                     </label>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 sm:hidden">
+                    <input type="file" id="mobile-camera-photo" className="hidden" accept="image/*" capture="environment" onChange={handleFileUpload} />
+                    <input type="file" id="mobile-camera-video" className="hidden" accept="video/*" capture="environment" onChange={handleFileUpload} />
+                    <Button asChild variant="outline" size="sm" type="button">
+                      <label htmlFor="mobile-camera-photo" className="cursor-pointer">📷 Camera</label>
+                    </Button>
+                    <Button asChild variant="outline" size="sm" type="button">
+                      <label htmlFor="mobile-camera-video" className="cursor-pointer">🎥 Video</label>
+                    </Button>
                   </div>
                 </div>
 
