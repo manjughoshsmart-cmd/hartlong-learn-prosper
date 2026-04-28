@@ -20,6 +20,7 @@ interface Resource {
   file_url: string | null;
   file_name: string | null;
   created_at: string;
+  thumbnail_url?: string | null;
 }
 
 const categories = ["all", "equity", "option", "mutual-fund", "etf", "general"];
@@ -48,7 +49,7 @@ export default function Resources() {
     setLoading(true);
     let q = supabase
       .from("resources")
-      .select("id, title, description, category, file_type, file_url, file_name, created_at")
+      .select("id, title, description, category, file_type, file_url, file_name, thumbnail_url, created_at")
       .eq("is_published", true)
       .order("created_at", { ascending: false });
     if (catFilter !== "all") q = q.eq("category", catFilter);
