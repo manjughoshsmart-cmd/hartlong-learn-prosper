@@ -357,7 +357,7 @@ export default function AdminResources() {
                     </label>
                   </div>
                   <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
-                    <input type="file" id="resource-file" className="hidden" onChange={handleFileUpload} accept="image/*,video/*,application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" />
+                    <input type="file" id="resource-file" className="hidden" onChange={handleFileUpload} accept={ACCEPTED_UPLOAD_TYPES} />
                     <label htmlFor="resource-file" className="cursor-pointer flex flex-col items-center gap-2">
                       <Upload className="h-8 w-8 text-muted-foreground" />
                       <span className="text-sm text-muted-foreground">{uploading ? "Uploading..." : "Tap to choose file (max 50MB)"}</span>
@@ -365,8 +365,8 @@ export default function AdminResources() {
                     </label>
                   </div>
                   <div className="grid grid-cols-2 gap-2 sm:hidden">
-                    <input type="file" id="mobile-camera-photo" className="hidden" accept="image/*" capture="environment" onChange={handleFileUpload} />
-                    <input type="file" id="mobile-camera-video" className="hidden" accept="video/*" capture="environment" onChange={handleFileUpload} />
+                    <input type="file" id="mobile-camera-photo" className="hidden" accept="image/*,.heic,.heif" capture="environment" onChange={handleFileUpload} />
+                    <input type="file" id="mobile-camera-video" className="hidden" accept="video/*,.mov,.m4v,.3gp" capture="environment" onChange={handleFileUpload} />
                     <Button asChild variant="outline" size="sm" type="button">
                       <label htmlFor="mobile-camera-photo" className="cursor-pointer">📷 Camera</label>
                     </Button>
