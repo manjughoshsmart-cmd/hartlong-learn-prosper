@@ -33,7 +33,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-muted-foreground">
-          <span>© {new Date().getFullYear()} HartLong Trading. Decode the Market 📉</span>
+          <span>© {new Date().getFullYear()} HartLong Trading.</span>
           <Link to="/privacy-policy" className="hover:text-foreground transition-colors">
             Privacy Policy
           </Link>
