@@ -66,7 +66,8 @@ export default function AdminResources() {
   const [versionDialogOpen, setVersionDialogOpen] = useState(false);
   const [autoCreate, setAutoCreate] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
-    return localStorage.getItem("admin_auto_create_resource") === "true";
+    const v = localStorage.getItem("admin_auto_create_resource");
+    return v === null ? true : v === "true"; // Default ON
   });
 
   useEffect(() => {
@@ -139,7 +140,7 @@ export default function AdminResources() {
 
     setUploading(false);
     if (!autoCreate || editId) {
-      toast({ title: "File uploaded!", description: "Now fill the title and tap Create Resource." });
+      toast({ title: "File uploaded!", description: "Tap Create Resource to save, or enable Auto-create." });
     }
   };
 
