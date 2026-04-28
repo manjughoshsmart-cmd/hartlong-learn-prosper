@@ -64,6 +64,14 @@ export default function AdminResources() {
   const [deleteConfirm, setDeleteConfirm] = useState<{ id: string; permanent: boolean } | null>(null);
   const [versionHistory, setVersionHistory] = useState<any[]>([]);
   const [versionDialogOpen, setVersionDialogOpen] = useState(false);
+  const [autoCreate, setAutoCreate] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("admin_auto_create_resource") === "true";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("admin_auto_create_resource", String(autoCreate));
+  }, [autoCreate]);
 
   const load = async () => {
     const [active, deleted] = await Promise.all([
@@ -113,10 +121,53 @@ export default function AdminResources() {
     const videoExts = ["mp4", "webm", "mov", "m4v", "3gp", "avi", "mkv"];
     const detectedType = imageExts.includes(ext) ? "image" : videoExts.includes(ext) ? "video" : "pdf";
 
-    setForm((f) => ({ ...f, file_url: urlData.publicUrl, file_type: detectedType }));
+    const baseName = file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim();
+
+    setForm((f) => {
+      const next = {
+        ...f,
+        file_url: urlData.publicUrl,
+        file_type: detectedType,
+        title: f.title.trim() || baseName,
+      };
+      if (autoCreate && !editId) {
+        // Fire auto-save with the freshly computed form
+        setTimeout(() => autoSave(next), 0);
+      }
+      return next;
+    });
 
     setUploading(false);
-    toast({ title: "File uploaded!", description: "Now fill the title and tap Create Resource." });
+    if (!autoCreate || editId) {
+      toast({ title: "File uploaded!", description: "Now fill the title and tap Create Resource." });
+    }
+  };
+
+  const autoSave = async (data: ResourceForm) => {
+    if (!data.title.trim()) {
+      toast({ title: "Auto-create failed", description: "Title missing", variant: "destructive" });
+      return;
+    }
+    const payload: any = {
+      title: data.title, description: data.description, category: data.category,
+      file_type: data.file_type, file_url: data.file_url, is_featured: data.is_featured,
+      is_published: data.is_published, visibility: data.visibility,
+      expires_at: data.expires_at || null, created_by: user?.id,
+    };
+    const { data: created, error } = await supabase.from("resources").insert(payload).select().single();
+    if (error) {
+      toast({ title: "Auto-create failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    if (created) {
+      await supabase.from("resource_versions").insert({
+        resource_id: created.id, file_url: data.file_url, uploaded_by: user?.id, version_number: 1,
+      });
+      await logAction("resource_created", "resource", created.id);
+    }
+    toast({ title: "Resource created automatically ✨", description: data.title });
+    closeDialog();
+    load();
   };
 
   const handleSave = async () => {
@@ -261,7 +312,13 @@ export default function AdminResources() {
 
                 {/* File Upload */}
                 <div className="space-y-2">
-                  <Label>Upload File</Label>
+                  <div className="flex items-center justify-between">
+                    <Label>Upload File</Label>
+                    <label className="flex items-center gap-2 text-xs text-muted-foreground cursor-pointer">
+                      <input type="checkbox" checked={autoCreate} onChange={(e) => setAutoCreate(e.target.checked)} />
+                      Auto-create after upload
+                    </label>
+                  </div>
                   <div className="border-2 border-dashed border-border rounded-lg p-4 text-center">
                     <input type="file" id="resource-file" className="hidden" onChange={handleFileUpload} accept="image/*,video/*,application/pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" />
                     <label htmlFor="resource-file" className="cursor-pointer flex flex-col items-center gap-2">
