@@ -274,6 +274,48 @@ export default function AdminSettings() {
   );
 }
 
+function LogoutAllDevicesButton() {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleLogoutAll = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.signOut({ scope: "global" });
+    if (error) {
+      toast({ title: "Failed to sign out everywhere", description: error.message, variant: "destructive" });
+      setLoading(false);
+      return;
+    }
+    toast({ title: "Signed out from all devices" });
+    setTimeout(() => { window.location.href = "/admin/login"; }, 800);
+  };
+
+  return (
+    <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline" className="w-full">
+          <LogOut className="mr-2 h-4 w-4" /> Log out from all devices
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Sign out everywhere?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This revokes every active session for your account on every device, including this one. You'll need to sign in again.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction disabled={loading} onClick={handleLogoutAll}>
+            {loading ? "Signing out..." : "Sign out everywhere"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
 function DangerZoneCard() {
   const { user } = useAuth();
   const { toast } = useToast();
