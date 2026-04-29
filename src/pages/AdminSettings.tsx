@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import PasswordStrengthIndicator, { validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
-import { Settings, Lock, Palette, Eye, EyeOff, Save, Shield, ScrollText, ArrowLeft, Trash2, AlertTriangle } from "lucide-react";
+import { Settings, Lock, Palette, Eye, EyeOff, Save, Shield, ScrollText, ArrowLeft, Trash2, AlertTriangle, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -195,6 +195,15 @@ export default function AdminSettings() {
                   <Button onClick={handlePasswordChange} disabled={changingPassword} className="w-full">
                     <Lock className="mr-2 h-4 w-4" /> {changingPassword ? "Updating..." : "Change Password"}
                   </Button>
+                </CardContent>
+              </Card>
+              <Card className="glass-card mt-6">
+                <CardHeader>
+                  <CardTitle className="font-display flex items-center gap-2"><LogOut className="h-5 w-5" /> Active Sessions</CardTitle>
+                  <CardDescription>Sign out of every device where this account is currently logged in.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <LogoutAllDevicesButton />
                 </CardContent>
               </Card>
             </TabsContent>
