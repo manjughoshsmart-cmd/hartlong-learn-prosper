@@ -298,11 +298,24 @@ export default function AdminResources() {
             <h1 className="font-display text-3xl font-bold"><span className="text-gradient-primary">Manage Resources</span></h1>
             <p className="text-muted-foreground">Create, edit, and manage educational content</p>
           </div>
-          <Dialog open={dialogOpen} onOpenChange={(o) => { if (!o) closeDialog(); else setDialogOpen(true); }}>
+          <Dialog open={dialogOpen} onOpenChange={(o) => {
+            // Block accidental close while a file upload is in flight (mobile pickers can fire spurious close)
+            if (!o && uploading) return;
+            if (!o) closeDialog(); else setDialogOpen(true);
+          }}>
             <DialogTrigger asChild>
               <Button className="glow-primary"><Plus className="mr-2 h-4 w-4" /> Add Resource</Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw]">
+            <DialogContent
+              className="max-w-2xl max-h-[90vh] overflow-y-auto w-[95vw]"
+              onPointerDownOutside={(e) => { if (uploading) e.preventDefault(); }}
+              onInteractOutside={(e) => { if (uploading) e.preventDefault(); }}
+              onEscapeKeyDown={(e) => { if (uploading) e.preventDefault(); }}
+              onOpenAutoFocus={(e) => {
+                // Prevent the dialog from stealing focus on mobile after a file picker returns
+                e.preventDefault();
+              }}
+            >
               <DialogHeader>
                 <DialogTitle className="font-display">{editId ? "Edit" : "Create"} Resource</DialogTitle>
                 <DialogDescription>Fill in the resource details below</DialogDescription>
