@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import PasswordStrengthIndicator, { validatePasswordStrength } from "@/components/PasswordStrengthIndicator";
-import { Settings, Lock, Palette, Eye, EyeOff, Save, Shield, ScrollText, ArrowLeft, Trash2, AlertTriangle } from "lucide-react";
+import { Settings, Lock, Palette, Eye, EyeOff, Save, Shield, ScrollText, ArrowLeft, Trash2, AlertTriangle, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -197,6 +197,15 @@ export default function AdminSettings() {
                   </Button>
                 </CardContent>
               </Card>
+              <Card className="glass-card mt-6">
+                <CardHeader>
+                  <CardTitle className="font-display flex items-center gap-2"><LogOut className="h-5 w-5" /> Active Sessions</CardTitle>
+                  <CardDescription>Sign out of every device where this account is currently logged in.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <LogoutAllDevicesButton />
+                </CardContent>
+              </Card>
             </TabsContent>
 
             {/* Branding Tab */}
@@ -262,6 +271,48 @@ export default function AdminSettings() {
         </motion.div>
       </div>
     </AdminLayout>
+  );
+}
+
+function LogoutAllDevicesButton() {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleLogoutAll = async () => {
+    setLoading(true);
+    const { error } = await supabase.auth.signOut({ scope: "global" });
+    if (error) {
+      toast({ title: "Failed to sign out everywhere", description: error.message, variant: "destructive" });
+      setLoading(false);
+      return;
+    }
+    toast({ title: "Signed out from all devices" });
+    setTimeout(() => { window.location.href = "/admin/login"; }, 800);
+  };
+
+  return (
+    <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline" className="w-full">
+          <LogOut className="mr-2 h-4 w-4" /> Log out from all devices
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Sign out everywhere?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This revokes every active session for your account on every device, including this one. You'll need to sign in again.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction disabled={loading} onClick={handleLogoutAll}>
+            {loading ? "Signing out..." : "Sign out everywhere"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
